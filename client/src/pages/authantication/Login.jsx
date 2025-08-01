@@ -5,7 +5,7 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
     email: '',
     password: '',
     confirmPassword: ''
