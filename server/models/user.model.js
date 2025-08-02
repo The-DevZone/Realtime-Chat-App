@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar_img: {
     type: String, // Usually image URL path or base64 string
+    required: true,
     default: ''   // optional default
   }
 },{timestamps:true});
