@@ -3,8 +3,9 @@ import { errorHendler } from "../utilities/errorHendler.utility.js";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 import bcrypt from "bcryptjs";
 import { response } from "express";
+import { sendToken } from "../utilities/jwtToken.utility.js"
 
-const register = asyncHandler(async (req, res, next) => {
+export const register = asyncHandler(async (req, res, next) => {
 
   const { firstName, userName, password, gender, avatar_img } = req.body || {};
 
@@ -32,17 +33,9 @@ const register = asyncHandler(async (req, res, next) => {
     avatar_img: avatar
   })
 
-  return res.status(200).json({
-    success: true,
-    message: "User created successfully",
-    responseData: {
-      newUser
-    }
-  });
+  sendToken(newUser, res, "User created successFully")
+
 });
-
-export default register;
-
 
 export const login = asyncHandler(async (req, res, next) => {
   const { userName, password } = req.body;
@@ -64,13 +57,24 @@ export const login = asyncHandler(async (req, res, next) => {
     return next(new errorHendler("password dos't match", 400));
   }
 
-  res.status(200).json({
-    success: true,
-    message: "Login successfully",
-    responseData: {
-      user
-    }
-  })
+  sendToken(user, res, "Login successfully")
 
 })
 
+export const getProfile = asyncHandler(async (req, res, next) => {
+
+  const userId = req.user?._id
+
+  if (!userId) {
+    return next(new errorHendler("userId is not valid", 400))
+  }
+
+  const profile = await User.findById(userId)
+  res.status(200).json({
+    success: true,
+    message: "User profile successfully",
+    responseData: {
+      profile,
+    }
+  })
+})
