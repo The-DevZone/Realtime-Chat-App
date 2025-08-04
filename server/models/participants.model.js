@@ -1,4 +1,4 @@
-import { mongoose } from " mongoose"
+import  mongoose  from "mongoose"
 
 const participantSchema = new mongoose.Schema({
 
@@ -7,7 +7,7 @@ const participantSchema = new mongoose.Schema({
         ref: "User"
     }],
 
-    messages: [{
+    message: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message"
     }],

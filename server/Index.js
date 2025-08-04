@@ -8,6 +8,7 @@ import { errorMiddleware } from "./middlewares/error.middleware.js";
 import register from "./routes/user.route.js";
 import { login } from './controllers/user.controller.js';
 import cookieParser from 'cookie-parser';
+import sandMessages from './routes/message.route.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ app.use(cookieParser())
 connectMongo(); // Connect to MongoDB
 
 app.use("/api/v1/users", register); // Mount route
-// app.use("api/v1/users", login);
+app.use("/api/v1/message" , sandMessages);
 
 app.use(errorMiddleware);
 

@@ -1,9 +1,11 @@
 import User from "../models/user.model.js"; // if needed
+import Message from "../models/message.model.js"; // if needed
+import Conversation from "../models/participants.model.js"
 import { errorHendler } from "../utilities/errorHendler.utility.js";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 import bcrypt from "bcryptjs";
-import { response } from "express";
-import { sendToken } from "../utilities/jwtToken.utility.js"
+import { sendToken } from "../utilities/jwtToken.utility.js";
+
 
 export const register = asyncHandler(async (req, res, next) => {
 
@@ -76,5 +78,36 @@ export const getProfile = asyncHandler(async (req, res, next) => {
     responseData: {
       profile,
     }
+  })
+})
+
+export const logOut = asyncHandler((req, res, next) => {
+
+  res
+    .status(200) // 200 OK, not 301 (redirect not needed)
+    .cookie("token", "", {
+      httpOnly: true,
+      maxAge: 0, // expire immediately
+      // secure: true, // use in production with HTTPS
+      // sameSite: "Lax"
+    })
+    .json({
+      success: true,
+      message: "Logout successful",
+    });
+});
+
+export const getOtherUsers = asyncHandler(async (req, res, next) => {
+  const otherUser = await User.find({ _id: { $ne: req.user?._id } })
+
+  if(!otherUser){
+    return next(new errorHendler("No other users found", 400))
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Other users successfully",
+    responseData: otherUser
+    
   })
 })
