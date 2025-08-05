@@ -5,18 +5,14 @@ import Conversation from "../models/participants.model.js"
 import { errorHendler } from "../utilities/errorHendler.utility.js";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 
+// This function sends a message from a user to another user
 export const sendMessage = asyncHandler(async (req, res, next) => {
-  console.log("sendMessage chal rahahu ")
-  // console.log(req)
   const senderId = req.user?._id
-  // const receiverId = req.paramId?._id
-  const receiverId = req.params.receiverId; // ✅ Correct
+  const receiverId = req.params.receiverId; 
   const message = req.body.message
-  console.log("senderId" + senderId)
-  console.log("receiverId" + receiverId)
-  console.log("message" + message)
 
 
+  // Check if all fields are filled
   if (!senderId || !receiverId || !message) {
     return next(new errorHendler("All fields are required", 400))
   }
@@ -25,33 +21,52 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     participant: [senderId, receiverId]
   })
 
-  
-  
-  if (!conversation) {
-    console.log("ma enter hua hu conversation ma")
+
+
+  if (!conversation) { //  Check if a conversation exists, if not create one
     conversation = await Conversation.create({
       participant: [senderId, receiverId]
     })
   }
-  console.log(conversation)
 
-  const newMessage = await Message.create({
+  const newMessage = await Message.create({ //  Create a new message
     senderId,
     receiverId,
     message
   })
 
-  if (newMessage) {
+  if (newMessage) {    //  If the message was created successfully, add it to the conversation
     conversation.message.push(newMessage._id)
     await conversation.save()
   }
 
-  console.log("message" + newMessage)
-
-  res
-    .status(200).json({
-      success: true,
-      message: "Message sent successfully",
-      responseData: newMessage
-    });
+  res.status(200).json({ //  Return a success response
+    success: true,
+    message: "Message sent successfully",
+    responseData: newMessage
+  });
 });
+
+
+export const getMessages = asyncHandler(async (req, res, next) => { //  This function gets all the messages between two users
+  //  ya dono id wahi ha senderId or receiverId bss ma sirf iska name change kr raha hu ss
+  const myId = req.user?._id
+  const otherParticipant = req.params.otherParticipant;
+
+
+
+  const conversation = await Conversation.findOne({ //  Find the conversation between the two users
+    participant: { $all: [myId, otherParticipant] },
+  }).populate("message")
+
+  if (!conversation) { //  If the conversation doesn't exist, return an error
+    return next(new errorHendler("Conversation not found", 404))
+  }
+
+  res.status(200).json({ //  If the conversation exists, return the conversation
+    success: true,
+    responseData:conversation
+  })
+
+})
+

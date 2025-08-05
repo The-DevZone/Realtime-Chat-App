@@ -111,3 +111,32 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
     
   })
 })
+
+
+// User Profile API
+
+export const  updateProfile = asyncHandler(async (req, res, next) => {
+  const userId = req.user?._id
+  const { firstName, userName, gender, avatar_img } = req.body || {};
+
+  if (!userId || !firstName || !userName || !gender || !avatar_img) {
+    return next(new errorHendler("All fields are required", 400))
+  }
+
+  const user = await User.findByIdAndUpdate(userId , {
+    firstName,
+    userName,
+    gender,
+    avatar_img
+  })
+
+  if (!user) {
+    return next(new errorHendler("User not found", 400))
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "User profile updated successfully",
+    responseData: user
+  })
+})
