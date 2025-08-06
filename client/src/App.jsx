@@ -1,6 +1,15 @@
+import { LogIn } from 'lucide-react';
 import React from 'react'
-import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { loginUserThunk } from './store/user/user.thunk';
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loginUserThunk())
+  })
+
   return (
     <>
       <Toaster />
