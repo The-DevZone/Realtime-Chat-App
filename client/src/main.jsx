@@ -29,12 +29,12 @@ const router = createBrowserRouter([
 
 
 createRoot(document.getElementById('root')).render(
-  <>
+  <div className='bg-whatsapp-bg text-white h-screen overflow-hidden'>
     <Provider store={store}>
       <App />
       <RouterProvider router={router} />
     </Provider>
-  </>
+  </div>
 )
 
 

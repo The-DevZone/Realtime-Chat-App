@@ -41,10 +41,9 @@ const SendMessage = () => {
         />
 
         {/* Send Button */}
-        <button
-          // onClick={handleSendMessage}
-          className="btn btn-circle btn-primary"
-        >
+        <button 
+        // onClick={handleSendMessage}
+          className="btn btn-circle btn-primary">
           <IoIosSend className="text-xl" />
         </button>
       </div>

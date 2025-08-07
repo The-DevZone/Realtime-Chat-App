@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import toast from "react-hot-toast";
+import {useDispatch, useSelector} from "react-redux"
+import { loginUserThunk } from "../../store/user/user.thunk";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
+    fullName: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
+
+  const dispatch = useDispatch()
+
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -27,69 +33,83 @@ const Login = () => {
     }
   };
 
-  const validateForm = () => {
-    const newError = {};
+  // const validateForm = () => {
+  //   const newError = {};
 
-    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
+  //   const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 
-    if (!isLogin && !formData.firstName.trim()) {
-      newError.name = "name is required"
-    }
+  //   // if (!isLogin && !formData.fullName.trim()) {
+  //   //   newError.name = "name is required"
+  //   // }
 
-    if (!formData.email) {
-      newError.email = "Email is required";
-    } else if (!EMAIL_REGEX.test(formData.email)) {
-      newError.email = "Email is not valid";
-    } else if (!/[A-Z]/.test(formData.email)) {
-      newError.email = "Email must contain at least one uppercase letter";
-    } else if (!/\d/.test(formData.email)) {
-      newError.email = "Email must contain at least one number";
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.email)) {
-      newError.email = "Email must contain at least one special character";
-    }
+  //   // if (!isLogin && !String(formData.fullName || "").trim()) {
+  //   //   newError.name = "Name is required";
+  //   // }
 
 
-    if (!formData.password) {
-      newError.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newError.password = "Password must be at least 8 characters";
-    } else if (!/[A-Z]/.test(formData.password)) {
-      newError.password = "Password must contain at least one uppercase letter";
-    } else if (!/[a-z]/.test(formData.password)) {
-      newError.password = "Password must contain at least one lowercase letter";
-    } else if (!/\d/.test(formData.password)) {
-      newError.password = "Password must contain at least one number";
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
-      newError.password = "Password must contain at least one special character";
-    }
-
-    if (!formData.confirmPassword) {
-      newError.confirmPassword = "ConfirmPassword is required"
-    } else if (formData.confirmPassword !== formData.password) {
-      newError.confirmPassword = "Password and comfirmPassword Dos't match"
-    }
+  //   if (!isLogin && !String(formData.fullName || "").trim()) {
+  //     newError.fullName = "Name is required";
+  //   }
+  //   if (!formData.email) {
+  //     newError.email = "Email is required";
+  //   } else if (!EMAIL_REGEX.test(formData.email)) {
+  //     newError.email = "Email is not valid";
+  //   } else if (!/[A-Z]/.test(formData.email)) {
+  //     newError.email = "Email must contain at least one uppercase letter";
+  //   } else if (!/\d/.test(formData.email)) {
+  //     newError.email = "Email must contain at least one number";
+  //   } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.email)) {
+  //     newError.email = "Email must contain at least one special character";
+  //   }
 
 
-    if (!isLogin && formData.password !== formData.confirmPassword) {
-      newError.confirmPassword = 'Passwords do not match';
-    }
+  //   if (!formData.password) {
+  //     newError.password = "Password is required";
+  //   } else if (formData.password.length < 8) {
+  //     newError.password = "Password must be at least 8 characters";
+  //   } else if (!/[A-Z]/.test(formData.password)) {
+  //     newError.password = "Password must contain at least one uppercase letter";
+  //   } else if (!/[a-z]/.test(formData.password)) {
+  //     newError.password = "Password must contain at least one lowercase letter";
+  //   } else if (!/\d/.test(formData.password)) {
+  //     newError.password = "Password must contain at least one number";
+  //   } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+  //     newError.password = "Password must contain at least one special character";
+  //   }
+  //   if (!isLogin) {
+  //     if (!formData.confirmPassword) {
+  //       newError.confirmPassword = "Confirm password is required";
+  //     } else if (formData.confirmPassword !== formData.password) {
+  //       newError.confirmPassword = "Password and confirm password don't match";
+  //     }
+  //   }
 
-    setErrors(newError);
-    return Object.keys(newError).length === 0;
-  };
+  //   if (!isLogin && formData.password !== formData.confirmPassword) {
+  //     newError.confirmPassword = 'Passwords do not match';
+  //   }
 
-  const handleSubmit = () => {
-    if (validateForm()) {
+  //   setErrors(newError);
+  //   return Object.keys(newError).length === 0;
+  // };
+
+  const handleSubmit = async () => {
+
+    // let isValid = validateForm()
+    // if (isValid) {
+
+       await dispatch(loginUserThunk(formData))
+       toast.success(isLogin ? 'Login successful!' : 'Account created successfully!');
       // Here you would normally handle the authentication
-      alert(isLogin ? 'Login successful!' : 'Account created successfully!');
-    }
+    // } else {
+    //   toast.error('Please fill all the fields correctly!');
+    // }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setFormData({
-      name: '',
+      fullName: '',
       email: '',
       password: '',
       confirmPassword: ''
@@ -135,14 +155,14 @@ const Login = () => {
                   <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/60" />
                   <input
                     type="text"
-                    name="name"
+                    name="fullName"
                     placeholder="Full Name"
-                    value={formData.name}
+                    value={formData.fullName}
                     onChange={handleInputChange}
                     className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
                   />
                 </div>
-                {errors.name && <p className="text-red-300 text-sm mt-2 ml-1">{errors.name}</p>}
+                {errors.fullName && <p className="text-red-300 text-sm mt-2 ml-1">{errors.fullName}</p>}
               </div>
 
               {/* Email field */}

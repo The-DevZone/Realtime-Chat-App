@@ -9,13 +9,13 @@ import { sendToken } from "../utilities/jwtToken.utility.js";
 
 export const register = asyncHandler(async (req, res, next) => {
 
-  const { firstName, userName, password, gender, avatar_img } = req.body || {};
+  const { firstName, email, password, gender, avatar_img } = req.body || {};
 
-  if (!userName || !password || !gender || !firstName || !avatar_img) {
+  if (!email || !password || !gender || !firstName || !avatar_img) {
     return next(new errorHendler("All fields are required", 400))
   }
 
-  const user = await User.findOne({ userName });
+  const user = await User.findOne({ email });
 
   if (user) {
     return next(new errorHendler("User already exists", 400))
@@ -24,12 +24,12 @@ export const register = asyncHandler(async (req, res, next) => {
   const hashPassword = bcrypt.hashSync(password, 10);
 
   const avatar_gender = gender === "male" ? "boy" : "girl"
-  const avatar = `https://avatar.iran.liara.run/public/${avatar_gender}?username={username}`
+  const avatar = `https://avatar.iran.liara.run/public/${avatar_gender}?email={email}`
 
 
   const newUser = await User.create({
     firstName,
-    userName,
+    email,
     password: hashPassword,
     gender,
     avatar_img: avatar
@@ -40,17 +40,17 @@ export const register = asyncHandler(async (req, res, next) => {
 });
 
 export const login = asyncHandler(async (req, res, next) => {
-  const { userName, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!userName || !password) {
+  if (!email || !password) {
     return next(new errorHendler("All fields are required", 400))
   }
 
-  const user = await User.findOne({ userName });
+  const user = await User.findOne({ email });
 
 
   if (!user || !user.password) {
-    return next(new errorHendler("userName and password invalid ", 400))
+    return next(new errorHendler("email and password invalid ", 400))
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -100,7 +100,7 @@ export const logOut = asyncHandler((req, res, next) => {
 export const getOtherUsers = asyncHandler(async (req, res, next) => {
   const otherUser = await User.find({ _id: { $ne: req.user?._id } })
 
-  if(!otherUser){
+  if (!otherUser) {
     return next(new errorHendler("No other users found", 400))
   }
 
@@ -108,24 +108,24 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
     success: true,
     message: "Other users successfully",
     responseData: otherUser
-    
+
   })
 })
 
 
 // User Profile API
 
-export const  updateProfile = asyncHandler(async (req, res, next) => {
+export const updateProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user?._id
-  const { firstName, userName, gender, avatar_img } = req.body || {};
+  const { firstName, email, gender, avatar_img } = req.body || {};
 
-  if (!userId || !firstName || !userName || !gender || !avatar_img) {
+  if (!userId || !firstName || !email || !gender || !avatar_img) {
     return next(new errorHendler("All fields are required", 400))
   }
 
-  const user = await User.findByIdAndUpdate(userId , {
+  const user = await User.findByIdAndUpdate(userId, {
     firstName,
-    userName,
+    email,
     gender,
     avatar_img
   })

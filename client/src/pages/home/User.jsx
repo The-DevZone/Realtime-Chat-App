@@ -17,7 +17,7 @@
 //             </div>
 //             <div>
 //                 <h2 className="line-clamp-1"> fullName</h2> 
-//                 <p className="text-xs"> username</p>   
+//                 <p className="text-xs"> email</p>   
 //             </div>
 //         </div>
 //     );
@@ -40,7 +40,7 @@ const User = () => {
         </div>
       </div>
 
-      {/* Name + Username */}
+      {/* Name + email */}
       <div className="flex flex-col">
         <h2 className="font-medium text-base text-white line-clamp-1">
           Asha Singh

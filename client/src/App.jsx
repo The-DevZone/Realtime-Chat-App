@@ -12,7 +12,10 @@ const App = () => {
 
   return (
     <>
-      <Toaster />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
     </>
   )
 }
