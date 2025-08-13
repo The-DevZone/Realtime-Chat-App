@@ -61,8 +61,22 @@
 
 import { IoSearch } from "react-icons/io5";
 import User from "./User";
+import { useDispatch, useSelector } from "react-redux";
+import { LogOut } from "lucide-react";
+import { logOutUserThunk } from "../../store/user/user.thunk";
 
 const UserSidebar = () => {
+
+    const dispatch = useDispatch();
+    // const {  } = useSelector((state) => state.user);
+    // const { isAuthenticated } = useSelector((state) => state.user);
+
+
+    const handleLogout = () => {
+        alert('Logging out...')
+        dispatch(logOutUserThunk())
+    }
+
     return (
         <div className="max-w-[20em] w-full h-screen flex flex-col border-r border-r-white/10 bg-base-100">
 
@@ -107,7 +121,10 @@ const UserSidebar = () => {
                     </div>
                     <h2 className="text-white font-medium">rohit_dev</h2>
                 </div>
-                <button className="btn btn-sm btn-primary px-4">Logout</button>
+                <button
+                    className="btn btn-sm btn-primary px-4"
+                    onClick={handleLogout}
+                >Logout</button>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  firstName: {
+  fullName: {
     type: String,
     required: true
   },
@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  gender: {
+    type: String,
+    required: true
+  },
+
   avatar_img: {
     type: String, // Usually image URL path or base64 string
     required: true,

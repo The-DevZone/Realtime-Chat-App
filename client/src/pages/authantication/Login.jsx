@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import toast from "react-hot-toast";
-import {useDispatch, useSelector} from "react-redux"
-import { loginUserThunk } from "../../store/user/user.thunk";
+import { useDispatch, useSelector } from "react-redux"
+import { loginUserThunk, registerUserThunk } from "../../store/user/user.thunk";
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
+    fullName: "",
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    gender: 'male',
   });
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  // const {isAuthenticated} =  useSelector(state => state.useReducer)
+  const { isAuthenticated } = useSelector((state) => state.userReducer);
+  console.log(isAuthenticated)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/")
+    }
+  }, [isAuthenticated])
+
 
   const [errors, setErrors] = useState({});
 
@@ -28,7 +42,7 @@ const Login = () => {
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
-        [name]: ''
+        [name]: '',
       }));
     }
   };
@@ -98,13 +112,33 @@ const Login = () => {
     // let isValid = validateForm()
     // if (isValid) {
 
-       await dispatch(loginUserThunk(formData))
-       toast.success(isLogin ? 'Login successful!' : 'Account created successfully!');
-      // Here you would normally handle the authentication
+    if (isLogin) {
+      const response = await dispatch(loginUserThunk({
+        email: formData.email,
+        password: formData.password,
+      }))
+
+      if (response.payload.success == true) {
+        navigate("/")
+      }
+
+      return toast.success('Login successful!');
+
+    } else {
+      const response = await dispatch(registerUserThunk(formData))
+      if (response.payload.success == true) {
+        navigate("/")
+      }
+      return toast.success('Account created successfully!');
+    }
+
+
+    // Here you would normally handle the authentication
     // } else {
     //   toast.error('Please fill all the fields correctly!');
     // }
   };
+
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
@@ -112,7 +146,8 @@ const Login = () => {
       fullName: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      gender: '',
     });
     setErrors({});
   };
@@ -233,6 +268,32 @@ const Login = () => {
                 </div>
               )}
 
+              <div className={`transition-all duration-300 overflow-hidden ${isLogin ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'
+                }`}>
+                <div className="flex justify-around items-center text-2xl h-10">
+                  <label htmlFor="male">Male</label>
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    // value={formData.gender}
+                    value="male"
+                    onChange={handleInputChange}
+                    checked={formData.gender === 'male'}
+                    className="size-4 " />
+
+                  <label htmlFor="female">Female</label>
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="female"
+                    checked={formData.gender === 'female'}
+                    onChange={handleInputChange}
+                    className="size-4"
+                  />
+                </div>
+              </div>
               {/* Submit button */}
               <button
                 type="button"

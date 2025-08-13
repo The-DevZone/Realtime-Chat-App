@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 
 
 export const loginUserThunk = createAsyncThunk('users/login', async ({ email, password }, { rejectWithValue }) => {
+
     try {
         const response = await axiosInstance.post("/users/login", {
             email,
@@ -18,21 +19,47 @@ export const loginUserThunk = createAsyncThunk('users/login', async ({ email, pa
     }
 },)
 
-export const registerUserThunk = createAsyncThunk('users/register', async ({ fullName, email, password, confirmPassword }, { rejectWithValue }) => {
+export const registerUserThunk = createAsyncThunk('users/register', async ({ fullName, email, password, gender }, { rejectWithValue }) => {
+
     try {
         const response = await axiosInstance.post("/users/register", {
             fullName,
             email,
             password,
-            confirmPassword,
+            gender
         })
-        console.log(response)
+        // console.log(fullName, email, password, gender)
 
+        return response.data
     } catch (error) {
         console.error(error)
-        // console.log(error?.response?.data?.message)
         const errorMessage = error?.response?.data?.message
         toast.error(errorMessage)
         return rejectWithValue(errorMessage)
     }
 })
+
+export const logOutUserThunk = createAsyncThunk(
+    "users/logout",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get("/users/logout");
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error);
+        }
+    }
+);
+
+export const getProfileThunk = createAsyncThunk(
+    "users/getProfile",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get("/users/get-profile");
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error);
+        }
+    })

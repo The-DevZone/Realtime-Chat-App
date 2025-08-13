@@ -3,12 +3,12 @@ import React from 'react'
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
-import { loginUserThunk } from './store/user/user.thunk';
+import { getProfileThunk } from './store/user/user.thunk';
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loginUserThunk())
-  })
+    dispatch(getProfileThunk())
+  }, [])
 
   return (
     <>

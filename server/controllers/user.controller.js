@@ -9,9 +9,9 @@ import { sendToken } from "../utilities/jwtToken.utility.js";
 
 export const register = asyncHandler(async (req, res, next) => {
 
-  const { firstName, email, password, gender, avatar_img } = req.body || {};
+  const { fullName, email, password, gender, avatar_img } = req.body || {};
 
-  if (!email || !password || !gender || !firstName || !avatar_img) {
+  if (!email || !password || !gender || !fullName ) {
     return next(new errorHendler("All fields are required", 400))
   }
 
@@ -28,7 +28,7 @@ export const register = asyncHandler(async (req, res, next) => {
 
 
   const newUser = await User.create({
-    firstName,
+    fullName,
     email,
     password: hashPassword,
     gender,
@@ -52,15 +52,11 @@ export const login = asyncHandler(async (req, res, next) => {
   if (!user || !user.password) {
     return next(new errorHendler("email and password invalid ", 400))
   }
-
   const isMatch = await bcrypt.compare(password, user.password);
-
   if (!isMatch) {
     return next(new errorHendler("password dos't match", 400));
   }
-
   sendToken(user, res, "Login successfully")
-
 })
 
 export const getProfile = asyncHandler(async (req, res, next) => {
@@ -117,14 +113,14 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user?._id
-  const { firstName, email, gender, avatar_img } = req.body || {};
+  const { fullName, email, gender, avatar_img } = req.body || {};
 
-  if (!userId || !firstName || !email || !gender || !avatar_img) {
+  if (!userId || !fullName || !email || !gender || !avatar_img) {
     return next(new errorHendler("All fields are required", 400))
   }
 
   const user = await User.findByIdAndUpdate(userId, {
-    firstName,
+    fullName,
     email,
     gender,
     avatar_img
