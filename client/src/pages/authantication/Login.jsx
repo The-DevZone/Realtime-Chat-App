@@ -21,13 +21,14 @@ const Login = () => {
   const navigate = useNavigate()
   // const {isAuthenticated} =  useSelector(state => state.useReducer)
   const { isAuthenticated } = useSelector((state) => state.userReducer);
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/")
-    }
-  }, [isAuthenticated])
+    // alert(isAuthenticated)
+    console.log(isAuthenticated)
+    if (isAuthenticated) navigate("/")
+
+  }, [isAuthenticated , navigate])
 
 
   const [errors, setErrors] = useState({});

@@ -73,7 +73,6 @@ const UserSidebar = () => {
 
 
     const handleLogout = () => {
-        alert('Logging out...')
         dispatch(logOutUserThunk())
     }
 

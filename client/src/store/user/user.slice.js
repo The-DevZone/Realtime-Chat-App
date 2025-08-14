@@ -3,7 +3,7 @@ import { getProfileThunk, loginUserThunk, logOutUserThunk, registerUserThunk } f
 
 const initialState = {
     isAuthenticated: false,
-    screenloading: false,
+    screenLoading: true,
     userProfile: null,
     buttonLoading: false
 }
@@ -20,14 +20,11 @@ export const userSlice = createSlice({
             state.buttonLoading = true
         })
         builder.addCase(loginUserThunk.fulfilled, (state, action) => {
-            // Add user to the state array
             state.userProfile = action.payload.responseData.user
             state.isAuthenticated = true
-
-            state.screenloading = true
+            state.buttonLoading = false
         })
         builder.addCase(loginUserThunk.rejected, (state, action) => {
-            // Add user to the state array
             state.buttonLoading = false
         })
 
@@ -37,45 +34,40 @@ export const userSlice = createSlice({
             state.buttonLoading = true
         })
         builder.addCase(registerUserThunk.fulfilled, (state, action) => {
-            // Add user to the state array
             state.userProfile = action.payload.responseData.user
+            state.isAuthenticated = true
             state.buttonLoading = false
         })
         builder.addCase(registerUserThunk.rejected, (state, action) => {
-            // Add user to the state array
             state.buttonLoading = false
         })
-
 
         // logout slice 
         builder.addCase(logOutUserThunk.pending, (state, action) => {
             state.buttonLoading = true
         })
         builder.addCase(logOutUserThunk.fulfilled, (state, action) => {
-            // Add user to the state array
             state.isAuthenticated = false,
-                state.screenloading = false,
+                state.buttonLoading = false,
                 state.userProfile = null,
                 state.buttonLoading = false
         })
         builder.addCase(logOutUserThunk.rejected, (state, action) => {
-            // Add user to the state array
             state.buttonLoading = false
         })
 
         // getProfile slice 
         builder.addCase(getProfileThunk.pending, (state, action) => {
-            state.buttonLoading = true
+            state.screenLoading = true
         })
         builder.addCase(getProfileThunk.fulfilled, (state, action) => {
             state.userProfile = action?.payload?.responseData
             state.isAuthenticated = true
-            state.buttonLoading = false
-            console.log(action.payload)
+            state.screenLoading = false
+            // console.log(action.payload)
         })
         builder.addCase(getProfileThunk.rejected, (state, action) => {
-            // Add user to the state array
-            state.buttonLoading = false
+            state.screenLoading = false
         })
     },
 })

@@ -5,14 +5,14 @@
 
 // export const PrivateRoute = ({ children }) => {
 //   const Navigator = useNavigate();
-//   const { isAuthenticated, screenloading } = useSelector((state) => state.user);
-//   console.log(isAuthenticated, screenloading)
+//   const { isAuthenticated, screenLoading } = useSelector((state) => state.user);
+//   console.log(isAuthenticated, screenLoading)
 //   useEffect(() => {
-//     console.log(isAuthenticated, screenloading)
-//     if (!isAuthenticated && !screenloading) {
+//     console.log(isAuthenticated, screenLoading)
+//     if (!isAuthenticated && !screenLoading) {
 //       Navigator("/login")
 //     }
-//   }, [isAuthenticated, screenloading])
+//   }, [isAuthenticated, screenLoading])
 //   return children
 // };
 
@@ -22,13 +22,11 @@ import { useNavigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
-  const { isAuthenticated, screenloading } = useSelector((state) => state.userReducer); // ✅ Fixed state path
-  console.log(isAuthenticated, screenloading)
+  const { isAuthenticated, screenLoading } = useSelector((state) => state.userReducer); // ✅ Fixed state path
+  console.log(isAuthenticated, screenLoading)
   useEffect(() => {
-    if (!isAuthenticated && !screenloading) {
-      navigate("/login");
-    }
-  }, [isAuthenticated, screenloading]);
+    if (!isAuthenticated && !screenLoading) navigate("/login");
+  }, [isAuthenticated, screenLoading, navigate]);
 
   return children;
 };

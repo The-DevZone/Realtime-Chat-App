@@ -9,17 +9,10 @@ import Home from './pages/home/Home.jsx';
 import Login from './pages/authantication/Login.jsx';
 import About from './pages/about/About.jsx';
 import { PrivateRoute } from './privateRoutes/Privateroute.jsx'
+// import { PrivateRoute } from './privateRoutes/Privateroute.jsx'
 // import { PrivateRoute } from '';
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />, // public route
-  },
-  {
-    path: "/login",
-    element: <Login />, // public route
-  },
   {
     path: "/",
     element: (
@@ -27,7 +20,12 @@ const router = createBrowserRouter([
         <Home />
       </PrivateRoute>
     ), // private route
+  },
+  {
+    path: "/login",
+    element: <Login />, // public route
   }
+
 ]);
 
 createRoot(document.getElementById('root')).render(
