@@ -6,7 +6,6 @@ import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 import bcrypt from "bcryptjs";
 import { sendToken } from "../utilities/jwtToken.utility.js";
 
-
 export const register = asyncHandler(async (req, res, next) => {
 
   const { fullName, email, password, gender, avatar_img } = req.body || {};
@@ -59,6 +58,21 @@ export const login = asyncHandler(async (req, res, next) => {
   sendToken(user, res, "Login successfully")
 })
 
+export const logOut = asyncHandler((req, res, next) => {
+
+  res
+    .status(200) // 200 OK, not 301 (redirect not needed)
+    .cookie("token", "", {
+      httpOnly: true,
+      maxAge: 0, // expire immediately
+      // secure: true, // use in production with HTTPS
+      // sameSite: "Lax"
+    }).json({
+      success: true,
+      message: "Logout successful",
+    });
+});
+
 export const getProfile = asyncHandler(async (req, res, next) => {
 
   const userId = req.user?._id
@@ -77,21 +91,19 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   })
 })
 
-export const logOut = asyncHandler((req, res, next) => {
-
-  res
-    .status(200) // 200 OK, not 301 (redirect not needed)
-    .cookie("token", "", {
-      httpOnly: true,
-      maxAge: 0, // expire immediately
-      // secure: true, // use in production with HTTPS
-      // sameSite: "Lax"
-    })
-    .json({
-      success: true,
-      message: "Logout successful",
-    });
-});
+// export const logOut = asyncHandler((req, res, next) => {
+//   res
+//     .status(200)
+//     .clearCookie("token", {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production", // Prod me secure cookie
+//       sameSite: "strict", // CSRF attacks se bachne ke liye
+//     })
+//     .json({
+//       success: true,
+//       message: "Logout successful",
+//     });
+// });
 
 export const getOtherUsers = asyncHandler(async (req, res, next) => {
   const otherUser = await User.find({ _id: { $ne: req.user?._id } })
@@ -108,31 +120,30 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
   })
 })
 
-
 // User Profile API
 
-export const updateProfile = asyncHandler(async (req, res, next) => {
-  const userId = req.user?._id
-  const { fullName, email, gender, avatar_img } = req.body || {};
+// export const updateProfile = asyncHandler(async (req, res, next) => {
+//   const userId = req.user?._id
+//   const { fullName, email, gender, avatar_img } = req.body || {};
 
-  if (!userId || !fullName || !email || !gender || !avatar_img) {
-    return next(new errorHendler("All fields are required", 400))
-  }
+//   if (!userId || !fullName || !email || !gender || !avatar_img) {
+//     return next(new errorHendler("All fields are required", 400))
+//   }
 
-  const user = await User.findByIdAndUpdate(userId, {
-    fullName,
-    email,
-    gender,
-    avatar_img
-  })
+//   const user = await User.findByIdAndUpdate(userId, {
+//     fullName,
+//     email,
+//     gender,
+//     avatar_img
+//   })
 
-  if (!user) {
-    return next(new errorHendler("User not found", 400))
-  }
+//   if (!user) {
+//     return next(new errorHendler("User not found", 400))
+//   }
 
-  res.status(200).json({
-    success: true,
-    message: "User profile updated successfully",
-    responseData: user
-  })
-})
+//   res.status(200).json({
+//     success: true,
+//     message: "User profile updated successfully",
+//     responseData: user
+//   })
+// })

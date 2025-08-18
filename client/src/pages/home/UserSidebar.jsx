@@ -61,8 +61,8 @@
 
 import { IoSearch } from "react-icons/io5";
 import User from "./User";
-import { useDispatch, useSelector } from "react-redux";
-import { LogOut } from "lucide-react";
+import { useDispatch} from "react-redux";
+// import { LogOut } from "lucide-react";
 import { logOutUserThunk } from "../../store/user/user.thunk";
 
 const UserSidebar = () => {

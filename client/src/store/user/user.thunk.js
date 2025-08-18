@@ -10,7 +10,7 @@ export const loginUserThunk = createAsyncThunk('users/login', async ({ email, pa
             email,
             password,
         })
-        console.log(response)
+        // console.log(response)
         return response.data
     } catch (error) {
         console.log(error)
@@ -28,7 +28,6 @@ export const registerUserThunk = createAsyncThunk('users/register', async ({ ful
             password,
             gender
         })
-        // console.log(fullName, email, password, gender)
 
         return response.data
     } catch (error) {
@@ -53,17 +52,27 @@ export const logOutUserThunk = createAsyncThunk(
 );
 
 export const getProfileThunk = createAsyncThunk(
-    "users/getprofile",
+    "users/get-profile",
     async (_, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get("/users/get-profile");
-            console.log("getProfileThunk hu ma " + response.data)
+            console.log("getProfileThunk hu ma ", response.data)
             return response.data;
         } catch (error) {
             console.log(error);
             return rejectWithValue(error);
         }
     })
-
-    // export const otherUSerProfileThunk = createAsyncThunk(
-    //     "/users/other-users" , async() 
+export const otherUserProfileThunk = createAsyncThunk(
+    "users/other-users",
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get("/users/other-users");
+            // console.log("getProfileThunk hu ma " + response.data)
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return rejectWithValue(error);
+        }
+    }
+)

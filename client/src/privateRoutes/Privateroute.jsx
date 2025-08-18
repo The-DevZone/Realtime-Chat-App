@@ -23,8 +23,9 @@ import { useNavigate } from "react-router-dom";
 export const PrivateRoute = ({ children }) => {
   const navigate = useNavigate();
   const { isAuthenticated, screenLoading } = useSelector((state) => state.userReducer); // ✅ Fixed state path
-  console.log(isAuthenticated, screenLoading)
+  console.log(`${isAuthenticated} ${screenLoading}`)
   useEffect(() => {
+    console.log("private wala cha raha hu ma")
     if (!isAuthenticated && !screenLoading) navigate("/login");
   }, [isAuthenticated, screenLoading, navigate]);
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux"
-import { loginUserThunk, registerUserThunk } from "../../store/user/user.thunk";
+import { getProfileThunk, loginUserThunk, registerUserThunk } from "../../store/user/user.thunk";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -19,17 +19,12 @@ const Login = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // const {isAuthenticated} =  useSelector(state => state.useReducer)
   const { isAuthenticated } = useSelector((state) => state.userReducer);
-  // console.log(isAuthenticated)
 
   useEffect(() => {
-    // alert(isAuthenticated)
-    console.log(isAuthenticated)
     if (isAuthenticated) navigate("/")
 
-  }, [isAuthenticated , navigate])
-
+  }, [isAuthenticated ])
 
   const [errors, setErrors] = useState({});
 
@@ -120,14 +115,18 @@ const Login = () => {
       }))
 
       if (response.payload.success == true) {
+        console.log(response.payload)
+        console.log("logged in dispatch hua hu profile ")
+        dispatch(getProfileThunk());
         navigate("/")
       }
-
+      
       return toast.success('Login successful!');
-
+      
     } else {
       const response = await dispatch(registerUserThunk(formData))
       if (response.payload.success == true) {
+        dispatch(getProfileThunk());
         navigate("/")
       }
       return toast.success('Account created successfully!');
