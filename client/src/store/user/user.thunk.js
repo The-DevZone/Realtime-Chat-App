@@ -17,7 +17,7 @@ export const loginUserThunk = createAsyncThunk('users/login', async ({ email, pa
         toast.error(error.response.data.message)
         return rejectWithValue(error)
     }
-},)
+})
 
 export const registerUserThunk = createAsyncThunk('users/register', async ({ fullName, email, password, gender }, { rejectWithValue }) => {
 
@@ -62,17 +62,32 @@ export const getProfileThunk = createAsyncThunk(
             console.log(error);
             return rejectWithValue(error);
         }
-    })
+})
+
 export const otherUserProfileThunk = createAsyncThunk(
     "users/other-users",
     async (_, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get("/users/other-users");
-            // console.log("getProfileThunk hu ma " + response.data)
             return response.data;
         } catch (error) {
             console.log(error);
             return rejectWithValue(error);
+        }
+    }
+)
+
+export const searchUserThunk = createAsyncThunk(
+    "users/search",
+    async (searchTerm = "" , {rejectWithValue} ) => {
+        try {
+            const response = await axiosInstance.get(`/users/search-users?search=${searchTerm}`);
+            return response.data;
+            
+        } catch (error) {
+            console.log(error)
+            return rejectWithValue(error)
+            
         }
     }
 )

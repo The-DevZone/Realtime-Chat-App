@@ -2,19 +2,19 @@
 // import User from "../models/user.model.js"; // if needed
 import Message from "../models/message.model.js"; // if needed
 import Conversation from "../models/participants.model.js"
-import { errorHendler } from "../utilities/errorHendler.utility.js";
+import ErrorHandler from "../utilities/errorHandler.utilities.js";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 
 // This function sends a message from a user to another user
 export const sendMessage = asyncHandler(async (req, res, next) => {
   const senderId = req.user?._id
-  const receiverId = req.params.receiverId; 
+  const receiverId = req.params.receiverId;
   const message = req.body.message
 
 
   // Check if all fields are filled
   if (!senderId || !receiverId || !message) {
-    return next(new errorHendler("All fields are required", 400))
+    return next(new ErrorHandler("All fields are required", 400))
   }
 
   let conversation = await Conversation.findOne({
@@ -60,12 +60,12 @@ export const getMessages = asyncHandler(async (req, res, next) => { //  This fun
   }).populate("message")
 
   if (!conversation) { //  If the conversation doesn't exist, return an error
-    return next(new errorHendler("Conversation not found", 404))
+    return next(new ErrorHandler("Conversation not found", 404))
   }
 
   res.status(200).json({ //  If the conversation exists, return the conversation
     success: true,
-    responseData:conversation
+    responseData: conversation
   })
 
 })

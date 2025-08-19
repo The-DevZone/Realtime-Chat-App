@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getProfileThunk, loginUserThunk, logOutUserThunk, otherUserProfileThunk, registerUserThunk } from './user.thunk'
+import { getProfileThunk, loginUserThunk, logOutUserThunk, otherUserProfileThunk, registerUserThunk, searchUserThunk } from './user.thunk'
 // import { getOtherUsers } from '../../../../server/controllers/user.controller'
 
 const initialState = {
@@ -8,12 +8,19 @@ const initialState = {
     userProfile: null,
     buttonLoading: false,
     screenLoading: true,
+    selectedUser: null,
+    searchUser: [],
 }
 
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        setSelectedUser: (state, action) => {
+            state.selectedUser = action?.payload
+        }
+
+    },
 
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
@@ -58,21 +65,7 @@ export const userSlice = createSlice({
             state.buttonLoading = false
         })
 
-        // // getProfile slice 
-        // builder.addCase(getProfileThunk.pending, (state, action) => {
-        //     // state.screenLoading = true
-        // })
-        // builder.addCase(getProfileThunk.fulfilled, (state, action) => {
-        //     state.isAuthenticated = true;
-        //     console.log("Slice fulfilled payload:", action.payload);
-        //     state.userProfile = action.payload.responseData?.profile; // yaha profile save karo
-        //     state.screenLoading = false;
-
-        // })
-        // builder.addCase(getProfileThunk.rejected, (state, action) => {
-        //     state.screenLoading = false
-        // })
-
+        // get profile slice
         builder.addCase(getProfileThunk.pending, (state) => {
             state.screenLoading = true
         })
@@ -101,10 +94,22 @@ export const userSlice = createSlice({
         builder.addCase(otherUserProfileThunk.rejected, (state, action) => {
             state.screenLoading = false
         })
+
+        // search user profile filter bar
+        builder.addCase(searchUserThunk.pending, (state, action) => {
+            state.buttonLoading = true
+        })
+        builder.addCase(searchUserThunk.fulfilled, (state, action) => {
+            state.searchUser = action?.payload?.responseData
+            state.buttonLoading = false;
+        })
+        builder.addCase(searchUserThunk.rejected, (state, action) => {
+            state.buttonLoading = false
+        })
     },
 })
 
 // Action creators are generated for each case reducer function
-// export const { } = userSlice.actions
+export const { setSelectedUser } = userSlice.actions
 export default userSlice.reducer
 

@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from './App.jsx';
 import Home from './pages/home/Home.jsx';
 import Login from './pages/authantication/Login.jsx';
-import About from './pages/about/About.jsx';
+// import About from './pages/about/About.jsx';
 import { PrivateRoute } from './privateRoutes/Privateroute.jsx'
 // import { PrivateRoute } from './privateRoutes/Privateroute.jsx'
 // import { PrivateRoute } from '';

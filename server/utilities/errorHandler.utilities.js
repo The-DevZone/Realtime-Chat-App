@@ -1,4 +1,4 @@
-class ErrorHendler extends Error {
+class ErrorHandler extends Error {
     constructor(message, statuscode) {
         super(message)
         this.statuscode = statuscode
@@ -6,4 +6,5 @@ class ErrorHendler extends Error {
     }
 }
 
-export const errorHendler = ErrorHendler
+// export const ErrorHandler = ErrorHandler
+export default ErrorHandler;

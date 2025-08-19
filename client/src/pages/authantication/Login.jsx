@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux"
-import { getProfileThunk, loginUserThunk, registerUserThunk } from "../../store/user/user.thunk";
+import { getProfileThunk, loginUserThunk, otherUserProfileThunk, registerUserThunk, searchUserThunk } from "../../store/user/user.thunk";
 import { useNavigate } from 'react-router-dom';
 
 
@@ -118,6 +118,8 @@ const Login = () => {
         console.log(response.payload)
         console.log("logged in dispatch hua hu profile ")
         dispatch(getProfileThunk());
+        dispatch(otherUserProfileThunk());
+        dispatch(searchUserThunk());
         navigate("/")
       }
       
@@ -127,6 +129,8 @@ const Login = () => {
       const response = await dispatch(registerUserThunk(formData))
       if (response.payload.success == true) {
         dispatch(getProfileThunk());
+        dispatch(otherUserProfileThunk());
+        dispatch(searchUserThunk());
         navigate("/")
       }
       return toast.success('Account created successfully!');

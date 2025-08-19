@@ -1,19 +1,19 @@
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
-import { errorHendler } from "../utilities/errorHendler.utility.js";
+import ErrorHandler from "../utilities/errorHandler.utilities.js";
 
 export const isAuthenticated = asyncHandler((req, res, next) => {
   const token = req.cookies.token; // ✅ get token from cookies
 
   if (!token) {
-    return next(new errorHendler("Unauthorized: No token", 400));
+    return next(new ErrorHandler("Unauthorized: No token", 400));
   }
 
   let tokenData;
   try {
     tokenData = jwt.verify(token, process.env.SECRET_KEY); // ✅ correct: token, secret
   } catch (error) {
-    return next(new errorHendler("Invalid token", 401));
+    return next(new ErrorHandler("Invalid token", 401));
   }
 
   // req.userId = tokenData._id;

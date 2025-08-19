@@ -1,7 +1,7 @@
 import User from "../models/user.model.js"; // if needed
 import Message from "../models/message.model.js"; // if needed
 import Conversation from "../models/participants.model.js"
-import { errorHendler } from "../utilities/errorHendler.utility.js";
+import ErrorHandler from "../utilities/errorHandler.utilities.js";
 import { asyncHandler } from "../utilities/asyncHendler.utility.js";
 import bcrypt from "bcryptjs";
 import { sendToken } from "../utilities/jwtToken.utility.js";
@@ -10,14 +10,14 @@ export const register = asyncHandler(async (req, res, next) => {
 
   const { fullName, email, password, gender, avatar_img } = req.body || {};
 
-  if (!email || !password || !gender || !fullName ) {
-    return next(new errorHendler("All fields are required", 400))
+  if (!email || !password || !gender || !fullName) {
+    return next(new ErrorHandler("All fields are required", 400))
   }
 
   const user = await User.findOne({ email });
 
   if (user) {
-    return next(new errorHendler("User already exists", 400))
+    return next(new ErrorHandler("User already exists", 400))
   }
 
   const hashPassword = bcrypt.hashSync(password, 10);
@@ -42,18 +42,18 @@ export const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(new errorHendler("All fields are required", 400))
+    return next(new ErrorHandler("All fields are required", 400))
   }
 
   const user = await User.findOne({ email });
 
 
   if (!user || !user.password) {
-    return next(new errorHendler("email and password invalid ", 400))
+    return next(new ErrorHandler("email and password invalid ", 400))
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return next(new errorHendler("password dos't match", 400));
+    return next(new ErrorHandler("password dos't match", 400));
   }
   sendToken(user, res, "Login successfully")
 })
@@ -78,7 +78,7 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user?._id
 
   if (!userId) {
-    return next(new errorHendler("userId is not valid", 400))
+    return next(new ErrorHandler("userId is not valid", 400))
   }
 
   const profile = await User.findById(userId)
@@ -109,7 +109,7 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
   const otherUser = await User.find({ _id: { $ne: req.user?._id } })
 
   if (!otherUser) {
-    return next(new errorHendler("No other users found", 400))
+    return next(new ErrorHandler("No other users found", 400))
   }
 
   res.status(200).json({
@@ -119,6 +119,44 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
 
   })
 })
+// export const searchUser = asyncHandler(async (req, res, next) => {
+//   const search = req.body.fullName || "";
+//   // const searchData = await User.find({fullName: { $regex: req.user?._id } })
+//   const users = await User.find({
+//     fullName: { $regex: search, $options: "i" } // case-insensitive search
+//   });
+
+//   if (users.length === 0) {
+//     return next(new ErrorHandler("No  users found", 400))
+//   }
+
+//   res.status(200).json({
+//     success: true,
+//     message: " users fetch successfully",
+//     responseData: users
+
+//   })
+// })
+
+
+export const searchUser = asyncHandler(async (req, res, next) => {
+  const search = req.query.search || "";   // ✅ take from query instead of body
+
+  const users = await User.find({
+    fullName: { $regex: search, $options: "i" }, // case-insensitive
+  });
+
+  if (!users || users.length === 0) {
+    return next(new ErrorHandler("No users found", 400));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Users fetched successfully",
+    responseData: users,
+  });
+});
+
 
 // User Profile API
 
@@ -127,7 +165,7 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
 //   const { fullName, email, gender, avatar_img } = req.body || {};
 
 //   if (!userId || !fullName || !email || !gender || !avatar_img) {
-//     return next(new errorHendler("All fields are required", 400))
+//     return next(new ErrorHandler("All fields are required", 400))
 //   }
 
 //   const user = await User.findByIdAndUpdate(userId, {
@@ -138,7 +176,7 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
 //   })
 
 //   if (!user) {
-//     return next(new errorHendler("User not found", 400))
+//     return next(new ErrorHandler("User not found", 400))
 //   }
 
 //   res.status(200).json({
