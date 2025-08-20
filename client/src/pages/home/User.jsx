@@ -106,7 +106,7 @@ const User = ({ users, searchTerm = "" }) => {
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((state) => state.userReducer);
 
-  console.log("Selected User:", selectedUser);
+  // console.log("Selected User:", selectedUser);
 
   // Agar users nahi hai ya empty array hai
   if (!users || users.length === 0) {

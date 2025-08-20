@@ -11,9 +11,8 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
   const receiverId = req.params.receiverId;
   const message = req.body.message
 
-
   // Check if all fields are filled
-  if (!senderId || !receiverId || !message) {
+  if ( !message) {
     return next(new ErrorHandler("All fields are required", 400))
   }
 
@@ -52,8 +51,6 @@ export const getMessages = asyncHandler(async (req, res, next) => { //  This fun
   //  ya dono id wahi ha senderId or receiverId bss ma sirf iska name change kr raha hu ss
   const myId = req.user?._id
   const otherParticipant = req.params.otherParticipant;
-
-
 
   const conversation = await Conversation.findOne({ //  Find the conversation between the two users
     participant: { $all: [myId, otherParticipant] },

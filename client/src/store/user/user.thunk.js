@@ -56,7 +56,7 @@ export const getProfileThunk = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get("/users/get-profile");
-            console.log("getProfileThunk hu ma ", response.data)
+            // console.log("getProfileThunk hu ma ", response.data)
             return response.data;
         } catch (error) {
             console.log(error);

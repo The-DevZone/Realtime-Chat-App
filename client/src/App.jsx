@@ -23,7 +23,6 @@ const App = () => {
 
   useEffect(() => {
 
-    console.log("🔥 Dispatching getProfileThunk...");
     dispatch(getProfileThunk());
     dispatch(otherUserProfileThunk())
     dispatch(searchUserThunk())
