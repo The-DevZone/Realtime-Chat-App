@@ -19,7 +19,6 @@ const SendMessage = ({ receiverId }) => {
       return;
     }
     await dispatch(sandMessageThunk({ message: text, receiverId }));
-    // alert("")
     setText("");
   }
   return (
@@ -41,7 +40,6 @@ const SendMessage = ({ receiverId }) => {
           onClick={handleSendMessage}
           disabled={buttonLoading}
         >
-
           {buttonLoading ? "Sending..." : <IoIosSend className="text-xl" />}
         </button>
       </div>

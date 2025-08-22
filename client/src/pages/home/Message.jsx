@@ -52,38 +52,41 @@ import { useSelector } from "react-redux";
 
 const Message = ({ messages, selectedUser }) => {
 
-  console.log(messages , selectedUser)
+  console.log(messages, selectedUser)
   // const { user } = useSelector((state) => state.userReducer); // ✅ current logged in user
   const { userProfile } = useSelector((state) => state.userReducer);
   console.log(userProfile)
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages && messages?.length > 0 ? (
-        messages?.map((msg) => (
-          <div
-            key={msg._id}
-            className={`chat ${msg?.senderId === userProfile?._id ? "chat-end" : "chat-start"
-              }`}
-          >
-            <div className="chat-header">
-              {msg.senderId === userProfile?._id ? "You" : selectedUser?.fullName}
-              <time className="text-xs opacity-50 ml-2">
-                {new Date(msg?.createdAt).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </time>
-            </div>
+        messages?.map((msg , index) => {
+          console.log(msg)
+
+          return (
             <div
-              className={`chat-bubble ${msg?.senderId === userProfile?._id
+              key={msg._id || index}
+              className={`chat ${msg?.senderId === userProfile?._id ? "chat-end" : "chat-start"
+                }`}>
+              <div className="chat-header">
+                {msg.senderId === userProfile?._id ? "You" : selectedUser?.fullName}
+                <time className="text-xs opacity-50 ml-2">
+                  {new Date(msg?.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </time>
+              </div>
+              <div
+                className={`chat-bubble ${msg?.senderId === userProfile?._id
                   ? "chat-bubble-primary"
                   : "chat-bubble-secondary"
-                }`}
-            >
-              {msg?.message}
+                  }`} 
+                  >
+                {msg?.message}
+              </div>
             </div>
-          </div>
-        ))
+          )
+        })
       ) : (
         <p className="text-center text-gray-400">No messages yet</p>
       )}

@@ -115,8 +115,6 @@ const Login = () => {
       }))
 
       if (response.payload.success == true) {
-        console.log(response.payload)
-        console.log("logged in dispatch hua hu profile ")
         dispatch(getProfileThunk());
         dispatch(otherUserProfileThunk());
         dispatch(searchUserThunk());

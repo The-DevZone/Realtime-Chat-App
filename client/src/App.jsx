@@ -30,7 +30,6 @@ const App = () => {
 
 
   // const {otherUser} = useSelector((state) => state.userReducer)
-    // console.log(otherUser)
 
     // useEffect(() => {
     // },[])
