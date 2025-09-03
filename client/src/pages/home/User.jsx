@@ -1,7 +1,7 @@
 
 
 import "../../App.css";
-import {setSelectedUser} from "../../store/user/user.slice";
+import { setSelectedUser } from "../../store/user/user.slice";
 import HighlightedText from "./featchers/HighlightedText ";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -125,22 +125,25 @@ const User = ({ users, searchTerm = "" }) => {
 
   return (
     <div className="user-scroll h-full flex-1 overflow-y-auto px-3 flex flex-col gap-2">
-      {filteredUsers.map((user) => (
-        <div
-          key={user._id}
-          onClick={() => dispatch(setSelectedUser(user))}  // ✅ yaha per fix
-          className={`flex items-center gap-3 p-2 rounded-lg hover:bg-base-200 cursor-pointer transition ${selectedUser?._id === user?._id ? "bg-base-200" : ""}` } 
-        >
-          <div className="avatar online">
-            <div className="w-10 rounded-full">
-              <img src={user.avatar_img} alt="User Avatar" />
+      {filteredUsers.map((user) => {
+        // console.log(user);
+        return (
+          <div
+            key={user._id}
+            onClick={() => dispatch(setSelectedUser(user))}  // ✅ yaha per fix 
+            className={`flex items-center gap-3 p-2 rounded-lg hover:bg-base-200 cursor-pointer transition ${selectedUser?._id === user?._id ? "bg-base-200" : ""}`}
+          >
+            <div className="avatar online">
+              <div className="w-10 rounded-full">
+                <img src={user.avatar_img} alt="User Avatar"/>
+              </div>
+            </div>
+            <div>
+              <HighlightedText text={user.fullName} highlight={searchTerm} />
             </div>
           </div>
-          <div>
-            <HighlightedText text={user.fullName} highlight={searchTerm} />
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   );
 };

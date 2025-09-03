@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getMessageThunk, sandMessageThunk } from './message.thunk'
 
 const initialState = {
-    messages: [],
+    messages: null,
     buttonLoading: false,
 }
 
@@ -15,50 +15,69 @@ const messageSlice = createSlice({
         builder.addCase(sandMessageThunk.pending, (state) => {
             state.buttonLoading = true;
         })
-        // builder.addCase(sandMessageThunk.fulfilled, (state, action) => {
-        //     const newMessage = action.payload.responseData.message
-        //     console.log(newMessage)
-        //     console.log(typeof newMessage)
-        //     // agar state.messages null hai to [] se start karo
-        //     if (!state.messages) {
-        //         state.messages = []
-        //     }
-        //     // naye message ko push kar do
-        //     state.messages.push(newMessage)
-        //     state.buttonLoading = false;
-        //     state.buttonLoading = false;
-        // })
         builder.addCase(sandMessageThunk.fulfilled, (state, action) => {
-            let newMessage = action.payload.responseData.message;
-
-            // agar newMessage string hai, object me convert karo
-            if (typeof newMessage === "string") {
-                newMessage = {
-                    _id: Date.now().toString(),  // temporary id
-                    senderId: "68a2de875eefb713219bc68b",  // current user id
-                    receiverId: "68a566df5a7011dbbaf2cf7d", // receiver id
-                    message: newMessage,
-                    createdAt: new Date().toISOString()
-                };
-            }
-
-            if (!state.messages) state.messages = [];
-            state.messages.push(newMessage);
+            // state.messages = [...state.messages, action?.payload?.responseData]
+            // state.buttonLoading = false;
+            const oldMessages = state.messages ?? [];
+            state.messages = [...oldMessages, action.payload?.responseData];
             state.buttonLoading = false;
         });
         builder.addCase(sandMessageThunk.rejected, (state) => {
             state.buttonLoading = false;
         })
 
+
+
+
+
+
         //get message
         builder.addCase(getMessageThunk.pending, (state) => {
             state.buttonLoading = true;
         })
+        // builder.addCase(getMessageThunk.fulfilled, (state, action) => {
+        //     // console.log(action.payload.responseData.message)
+        //     console.log("getMessageThunk response 👉", action.payload.responseData);
+        //     state.messages = action.payload.responseData.message
+        //     state.buttonLoading = false;
+        // })
+
+        // builder.addCase(getMessageThunk.fulfilled, (state, action) => {
+        //         state.messages = action.payload.responseData.message;
+        //         state.buttonLoading = false;
+        //     // const serverMsgs = action.payload.responseData.message || [];
+
+        // //     // local aur server merge karo, duplicates hatao
+        // //     const allMsgs = [...serverMsgs, ...state.messages];
+        // //     const uniqueMsgs = allMsgs.filter(
+        // //         (msg, index, self) => index === self.findIndex(m => m._id === msg._id)
+        // //     );
+
+        // //     state.messages = uniqueMsgs.sort(
+        // //         (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        // //     );
+        // //     state.buttonLoading = false;
+        // });
+
         builder.addCase(getMessageThunk.fulfilled, (state, action) => {
-            // console.log(action.payload.responseData.message)
-            state.messages = action.payload.responseData.message
+            const serverMsgs = action.payload.responseData.message || [];
+            console.log(serverMsgs)
+            const localMsgs = state.messages || [];
+
+            const allMsgs = [...serverMsgs, ...localMsgs];
+            const uniqueMsgs = allMsgs.filter(
+                (msg, index, self) => index === self.findIndex(m => m._id === msg._id)
+            );
+
+            state.messages = uniqueMsgs.sort(
+                (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
             state.buttonLoading = false;
-        })
+        });
+
+
+
+
         builder.addCase(getMessageThunk.rejected, (state) => {
             state.buttonLoading = false;
         })

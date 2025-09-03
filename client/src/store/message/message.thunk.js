@@ -3,12 +3,11 @@ import axiosInstance from "../../components/utitlities/axiosInstance"
 
 export const sandMessageThunk = createAsyncThunk(
     'message/message',
-    async ({ message, receiverId }, { rejectWithValue }) => {
+    async ({ receiverId, message }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.post(`message/send/${receiverId}`, {
                 message
             })
-            console.log(response.data)
             return response.data
         } catch (error) {
             console.log(error)
@@ -21,7 +20,8 @@ export const getMessageThunk = createAsyncThunk(
     async ({ receiverId }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(`message/get-message/${receiverId}`,)
-            // console.log(response.data)
+            console.log(response.data)
+
             return response.data
         } catch (error) {
             console.log(error)

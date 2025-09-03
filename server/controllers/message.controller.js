@@ -50,11 +50,13 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 export const getMessages = asyncHandler(async (req, res, next) => { //  This function gets all the messages between two users
   //  ya dono id wahi ha senderId or receiverId bss ma sirf iska name change kr raha hu ss
   const myId = req.user?._id
-  const otherParticipant = req.params.otherParticipant;
+  const receiverId = req.params.receiverId;
 
   const conversation = await Conversation.findOne({ //  Find the conversation between the two users
-    participant: { $all: [myId, otherParticipant] },
+    participant: { $all: [myId, receiverId] },
   }).populate("message")
+
+  // console.log(conversation)
 
   if (!conversation) { //  If the conversation doesn't exist, return an error
     return next(new ErrorHandler("Conversation not found", 404))
@@ -62,7 +64,8 @@ export const getMessages = asyncHandler(async (req, res, next) => { //  This fun
 
   res.status(200).json({ //  If the conversation exists, return the conversation
     success: true,
-    responseData: conversation
+    responseData: conversation,
+    message: "Conversation found successfully"
   })
 
 })
