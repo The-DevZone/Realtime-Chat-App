@@ -8,31 +8,22 @@ import { Outlet } from 'react-router';
 import './App.css'
 import { getProfileThunk, otherUserProfileThunk, searchUserThunk } from './store/user/user.thunk';
 const App = () => {
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getProfileThunk())
-  // }, [])
-
   const dispatch = useDispatch();
 
   // useEffect(() => {
-  //   (async () => {
-  //     await dispatch(getProfileThunk());
-  //   })();
+
+  //   dispatch(getProfileThunk());
+  //   dispatch(otherUserProfileThunk())
+  //   dispatch(searchUserThunk())
   // }, []);
-
+  
   useEffect(() => {
+    (async () => {
+      await dispatch(getProfileThunk());
+       await dispatch(otherUserProfileThunk())
+    })();
+  }, []);
 
-    dispatch(getProfileThunk());
-    dispatch(otherUserProfileThunk())
-    dispatch(searchUserThunk())
-  }, [dispatch]);
-
-
-  // const {otherUser} = useSelector((state) => state.userReducer)
-
-    // useEffect(() => {
-    // },[])
   return (
     <>
       <Toaster

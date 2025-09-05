@@ -41,7 +41,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ //  Return a success response
     success: true,
-    message: "Message sent successfully",
+    // message: "Message sent successfully",
     responseData: newMessage
   });
 });
@@ -56,16 +56,16 @@ export const getMessages = asyncHandler(async (req, res, next) => { //  This fun
     participant: { $all: [myId, receiverId] },
   }).populate("message")
 
-  // console.log(conversation)
 
-  if (!conversation) { //  If the conversation doesn't exist, return an error
-    return next(new ErrorHandler("Conversation not found", 404))
-  }
+
+  // if (!conversation) { //  If the conversation doesn't exist, return an error
+  //   return next(new ErrorHandler("Conversation not found", 404))
+  // }
 
   res.status(200).json({ //  If the conversation exists, return the conversation
     success: true,
     responseData: conversation,
-    message: "Conversation found successfully"
+    // message: "Conversation found successfully"
   })
 
 })

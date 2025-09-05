@@ -118,10 +118,13 @@ const MessageContainer = () => {
   const { selectedUser } = useSelector((state) => state.userReducer);
   const { messages } = useSelector((state) => state.messageReducer);
 
-console.log("messages in container 👉", messages);
+  // console.log(messages)
+  // console.log(selectedUser)
+
+  // console.log("messages in container 👉", messages);
   useEffect(() => {
     if (selectedUser?._id) {
-            dispatch(getMessageThunk({ receiverId: selectedUser?._id }));
+      dispatch(getMessageThunk({ receiverId: selectedUser?._id }));
     }
   }, [selectedUser]);
 
@@ -151,11 +154,9 @@ console.log("messages in container 👉", messages);
 
         {/* Chat Messages */}
         <div className="flex-1 p-4 overflow-y-auto space-y-4">
-
+          {console.log("Rendering messages: ", messages)}
           {
             messages?.map((messageDetails, index) => {
-              // console.log(messageDetails?._id === selectedUser?._id)
-              // console.log(messageDetails?._id)
               return (
                 <Message key={messageDetails?._id || index} messageDetails={messageDetails} />
               )

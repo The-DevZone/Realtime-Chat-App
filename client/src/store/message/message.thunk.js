@@ -8,6 +8,7 @@ export const sandMessageThunk = createAsyncThunk(
             const response = await axiosInstance.post(`message/send/${receiverId}`, {
                 message
             })
+            // console.log("✅ SandMSg API Response:", response.data);
             return response.data
         } catch (error) {
             console.log(error)
@@ -20,8 +21,9 @@ export const getMessageThunk = createAsyncThunk(
     async ({ receiverId }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get(`message/get-message/${receiverId}`,)
-            console.log(response.data)
 
+            // console.log("✅ GetMsg API Response:", response.data);
+            
             return response.data
         } catch (error) {
             console.log(error)

@@ -16,10 +16,11 @@ const messageSlice = createSlice({
             state.buttonLoading = true;
         })
         builder.addCase(sandMessageThunk.fulfilled, (state, action) => {
-            // state.messages = [...state.messages, action?.payload?.responseData]
-            // state.buttonLoading = false;
             const oldMessages = state.messages ?? [];
             state.messages = [...oldMessages, action.payload?.responseData];
+
+            console.log("Message Added:", action.payload?.responseData); // ✅ Console check
+            console.log("All Messages:", state.messages); // ✅ Confirm added
             state.buttonLoading = false;
         });
         builder.addCase(sandMessageThunk.rejected, (state) => {
@@ -59,23 +60,23 @@ const messageSlice = createSlice({
         // //     state.buttonLoading = false;
         // });
 
+        // builder.addCase(getMessageThunk.fulfilled, (state, action) => {
+        //     const conversation = action?.payload?.responseData;
+        //     state.messages = conversation?.message || [];
+        //     console.log(conversation)
+        //     state.buttonLoading = false;
+        // });
+
         builder.addCase(getMessageThunk.fulfilled, (state, action) => {
-            const serverMsgs = action.payload.responseData.message || [];
-            console.log(serverMsgs)
-            const localMsgs = state.messages || [];
+            const conversation = action?.payload?.responseData;
 
-            const allMsgs = [...serverMsgs, ...localMsgs];
-            const uniqueMsgs = allMsgs.filter(
-                (msg, index, self) => index === self.findIndex(m => m._id === msg._id)
-            );
-
-            state.messages = uniqueMsgs.sort(
+            state.messages = [...(conversation?.message || [])].sort(
                 (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
             );
+
+            console.log("Fetched messages:", state.messages);
             state.buttonLoading = false;
         });
-
-
 
 
         builder.addCase(getMessageThunk.rejected, (state) => {

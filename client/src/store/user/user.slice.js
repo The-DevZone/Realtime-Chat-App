@@ -20,7 +20,6 @@ export const userSlice = createSlice({
             localStorage.setItem("selectedUser", JSON.stringify(action?.payload))
             state.selectedUser = action?.payload
         }
-
     },
 
     extraReducers: (builder) => {
@@ -77,7 +76,8 @@ export const userSlice = createSlice({
         builder.addCase(getProfileThunk.fulfilled, (state, action) => {
             // console.log(action.payload.responseData)
             // state.userProfile = action.payload.responseData  // ✅ yahin save hoga profile
-            state.userProfile = action.payload.responseData.profile;  // ✅ sirf profile save karo
+            state.userProfile = action.payload.responseData;
+            console.log(action.payload.responseData)  // ✅ sirf profile save karo
             state.isAuthenticated = true
             state.screenLoading = false
         })

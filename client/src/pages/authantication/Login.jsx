@@ -114,10 +114,10 @@ const Login = () => {
         password: formData.password,
       }))
 
-      if (response.payload.success == true) {
-        dispatch(getProfileThunk());
-        dispatch(otherUserProfileThunk());
-        dispatch(searchUserThunk());
+      if (response?.payload?.success == true) {
+        // dispatch(getProfileThunk());
+        // dispatch(otherUserProfileThunk());
+        // dispatch(searchUserThunk());
         navigate("/")
       }
       

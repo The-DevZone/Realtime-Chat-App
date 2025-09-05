@@ -6,7 +6,7 @@ import toast from "react-hot-toast"
 export const loginUserThunk = createAsyncThunk('users/login', async ({ email, password }, { rejectWithValue }) => {
 
     try {
-        const response = await axiosInstance.post("/users/login", {
+        const response = await axiosInstance?.post("/users/login", {
             email,
             password,
         })
@@ -22,7 +22,7 @@ export const loginUserThunk = createAsyncThunk('users/login', async ({ email, pa
 export const registerUserThunk = createAsyncThunk('users/register', async ({ fullName, email, password, gender }, { rejectWithValue }) => {
 
     try {
-        const response = await axiosInstance.post("/users/register", {
+        const response = await axiosInstance?.post("/users/register", {
             fullName,
             email,
             password,
@@ -42,7 +42,7 @@ export const logOutUserThunk = createAsyncThunk(
     "users/logout",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post("/users/logout");
+            const response = await axiosInstance?.post("/users/logout");
             return response.data;
         } catch (error) {
             console.log(error);
@@ -55,7 +55,7 @@ export const getProfileThunk = createAsyncThunk(
     "users/get-profile",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get("/users/get-profile");
+            const response = await axiosInstance?.get("/users/get-profile");
             // console.log("getProfileThunk hu ma ", response.data)
             return response.data;
         } catch (error) {
@@ -68,7 +68,7 @@ export const otherUserProfileThunk = createAsyncThunk(
     "users/other-users",
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get("/users/other-users");
+            const response = await axiosInstance?.get("/users/other-users");
             return response.data;
         } catch (error) {
             console.log(error);
@@ -81,7 +81,7 @@ export const searchUserThunk = createAsyncThunk(
     "users/search",
     async (searchTerm = "" , {rejectWithValue} ) => {
         try {
-            const response = await axiosInstance.get(`/users/search-users?search=${searchTerm}`);
+            const response = await axiosInstance?.get(`/users/search-users?search=${searchTerm}`);
             return response.data;
             
         } catch (error) {

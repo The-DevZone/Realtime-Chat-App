@@ -116,16 +116,23 @@
 import { useSelector } from "react-redux";
 
 const Message = ({ messageDetails }) => {
+
+  console.log("Rendering message:", messageDetails);
+
   const { userProfile, selectedUser } = useSelector((state) => state.userReducer);
 
 
   // wait until userProfile AND messageDetails are loaded
-  if (!userProfile?._id || !messageDetails) {
-    return <p className="text-center text-gray-400">Loading messages...</p>;
-  }
-  const isSender = messageDetails?.senderId?.toString() === userProfile?._id?.toString();
+  // if (!userProfile?._id || !messageDetails) {
+  //   return <p className="text-center text-gray-400">Loading messages...</p>;
+  // }
+  // const isSender = messageDetails?.senderId?.toString() === userProfile?.profile?._id?.toString();
+  // const myId =  || userProfile?._id;
+  const isSender =  userProfile?.profile?._id?.toString()  === messageDetails?.senderId?.toString();
 
-  // console.log(messageDetails?.senderId === userProfile?.responseData?.profile?._id)
+
+
+
 
   return (
     <div className="flex-1 p-4 space-y-4">

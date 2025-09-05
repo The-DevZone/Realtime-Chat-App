@@ -16,6 +16,7 @@ const SendMessage = () => {
       alert("Please enter a message");
       return;
     }
+    console.log(selectedUser)
      dispatch(
       sandMessageThunk(
         {
