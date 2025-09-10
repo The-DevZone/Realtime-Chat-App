@@ -24,7 +24,7 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated) navigate("/")
 
-  }, [isAuthenticated ])
+  }, [isAuthenticated])
 
   const [errors, setErrors] = useState({});
 
@@ -43,70 +43,70 @@ const Login = () => {
     }
   };
 
-  // const validateForm = () => {
-  //   const newError = {};
+  const validateForm = () => {
+    const newError = {};
 
-  //   const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  //   const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 
-  //   // if (!isLogin && !formData.fullName.trim()) {
-  //   //   newError.name = "name is required"
-  //   // }
+    // if (!isLogin && !formData.fullName.trim()) {
+    //   newError.name = "name is required"
+    // }
 
-  //   // if (!isLogin && !String(formData.fullName || "").trim()) {
-  //   //   newError.name = "Name is required";
-  //   // }
-
-
-  //   if (!isLogin && !String(formData.fullName || "").trim()) {
-  //     newError.fullName = "Name is required";
-  //   }
-  //   if (!formData.email) {
-  //     newError.email = "Email is required";
-  //   } else if (!EMAIL_REGEX.test(formData.email)) {
-  //     newError.email = "Email is not valid";
-  //   } else if (!/[A-Z]/.test(formData.email)) {
-  //     newError.email = "Email must contain at least one uppercase letter";
-  //   } else if (!/\d/.test(formData.email)) {
-  //     newError.email = "Email must contain at least one number";
-  //   } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.email)) {
-  //     newError.email = "Email must contain at least one special character";
-  //   }
+    // if (!isLogin && !String(formData.fullName || "").trim()) {
+    //   newError.name = "Name is required";
+    // }
 
 
-  //   if (!formData.password) {
-  //     newError.password = "Password is required";
-  //   } else if (formData.password.length < 8) {
-  //     newError.password = "Password must be at least 8 characters";
-  //   } else if (!/[A-Z]/.test(formData.password)) {
-  //     newError.password = "Password must contain at least one uppercase letter";
-  //   } else if (!/[a-z]/.test(formData.password)) {
-  //     newError.password = "Password must contain at least one lowercase letter";
-  //   } else if (!/\d/.test(formData.password)) {
-  //     newError.password = "Password must contain at least one number";
-  //   } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
-  //     newError.password = "Password must contain at least one special character";
-  //   }
-  //   if (!isLogin) {
-  //     if (!formData.confirmPassword) {
-  //       newError.confirmPassword = "Confirm password is required";
-  //     } else if (formData.confirmPassword !== formData.password) {
-  //       newError.confirmPassword = "Password and confirm password don't match";
-  //     }
-  //   }
+    if (!isLogin && !String(formData.fullName || "").trim()) {
+      newError.fullName = "Name is required";
+    }
+    if (!formData.email) {
+      newError.email = "Email is required";
+    } else if (!EMAIL_REGEX.test(formData.email)) {
+      newError.email = "Email is not valid";
+    } else if (!/[A-Z]/.test(formData.email)) {
+      newError.email = "Email must contain at least one uppercase letter";
+    } else if (!/\d/.test(formData.email)) {
+      newError.email = "Email must contain at least one number";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.email)) {
+      newError.email = "Email must contain at least one special character";
+    }
 
-  //   if (!isLogin && formData.password !== formData.confirmPassword) {
-  //     newError.confirmPassword = 'Passwords do not match';
-  //   }
 
-  //   setErrors(newError);
-  //   return Object.keys(newError).length === 0;
-  // };
+    if (!formData.password) {
+      newError.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newError.password = "Password must be at least 8 characters";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      newError.password = "Password must contain at least one uppercase letter";
+    } else if (!/[a-z]/.test(formData.password)) {
+      newError.password = "Password must contain at least one lowercase letter";
+    } else if (!/\d/.test(formData.password)) {
+      newError.password = "Password must contain at least one number";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      newError.password = "Password must contain at least one special character";
+    }
+    if (!isLogin) {
+      if (!formData.confirmPassword) {
+        newError.confirmPassword = "Confirm password is required";
+      } else if (formData.confirmPassword !== formData.password) {
+        newError.confirmPassword = "Password and confirm password don't match";
+      }
+    }
+
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      newError.confirmPassword = 'Passwords do not match';
+    }
+
+    setErrors(newError);
+    return Object.keys(newError).length === 0;
+  };
 
   const handleSubmit = async () => {
 
-    // let isValid = validateForm()
-    // if (isValid) {
+    let isValid = validateForm()
+    if (isValid) {
 
     if (isLogin) {
       const response = await dispatch(loginUserThunk({
@@ -115,14 +115,14 @@ const Login = () => {
       }))
 
       if (response?.payload?.success == true) {
-        // dispatch(getProfileThunk());
-        // dispatch(otherUserProfileThunk());
-        // dispatch(searchUserThunk());
+        dispatch(getProfileThunk());
+        dispatch(otherUserProfileThunk());
+        dispatch(searchUserThunk());
         navigate("/")
       }
-      
+
       return toast.success('Login successful!');
-      
+
     } else {
       const response = await dispatch(registerUserThunk(formData))
       if (response.payload.success == true) {
@@ -136,9 +136,9 @@ const Login = () => {
 
 
     // Here you would normally handle the authentication
-    // } else {
-    //   toast.error('Please fill all the fields correctly!');
-    // }
+    } else {
+      toast.error('Please fill all the fields correctly!');
+    }
   };
 
 

@@ -64,9 +64,7 @@ export const logOut = asyncHandler((req, res, next) => {
     .status(200) // 200 OK, not 301 (redirect not needed)
     .cookie("token", "", {
       httpOnly: true,
-      maxAge: 0, // expire immediately
-      // secure: true, // use in production with HTTPS
-      // sameSite: "Lax"
+      maxAge: 0, 
     }).json({
       success: true,
       message: "Logout successful",
@@ -91,20 +89,6 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   })
 })
 
-// export const logOut = asyncHandler((req, res, next) => {
-//   res
-//     .status(200)
-//     .clearCookie("token", {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === "production", // Prod me secure cookie
-//       sameSite: "strict", // CSRF attacks se bachne ke liye
-//     })
-//     .json({
-//       success: true,
-//       message: "Logout successful",
-//     });
-// });
-
 export const getOtherUsers = asyncHandler(async (req, res, next) => {
   const otherUser = await User.find({ _id: { $ne: req.user?._id } })
 
@@ -119,25 +103,6 @@ export const getOtherUsers = asyncHandler(async (req, res, next) => {
 
   })
 })
-// export const searchUser = asyncHandler(async (req, res, next) => {
-//   const search = req.body.fullName || "";
-//   // const searchData = await User.find({fullName: { $regex: req.user?._id } })
-//   const users = await User.find({
-//     fullName: { $regex: search, $options: "i" } // case-insensitive search
-//   });
-
-//   if (users.length === 0) {
-//     return next(new ErrorHandler("No  users found", 400))
-//   }
-
-//   res.status(200).json({
-//     success: true,
-//     message: " users fetch successfully",
-//     responseData: users
-
-//   })
-// })
-
 
 export const searchUser = asyncHandler(async (req, res, next) => {
   const search = req.query.search || "";   // ✅ take from query instead of body

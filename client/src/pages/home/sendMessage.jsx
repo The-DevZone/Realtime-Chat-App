@@ -16,7 +16,7 @@ const SendMessage = () => {
       alert("Please enter a message");
       return;
     }
-    console.log(selectedUser)
+
      dispatch(
       sandMessageThunk(
         {
@@ -42,7 +42,6 @@ const SendMessage = () => {
 
         {/* Send Button */}
         <button
-          // onClick={handleSendMessage}
           className="btn btn-circle btn-primary"
           onClick={handleSendMessage}
           disabled={buttonLoading}

@@ -12,14 +12,17 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
   const message = req.body.message
 
   // Check if all fields are filled
-  if ( !message) {
+  if (!message) {
     return next(new ErrorHandler("All fields are required", 400))
   }
 
-  let conversation = await Conversation.findOne({
-    participant: [senderId, receiverId]
-  })
+  // let conversation = await Conversation.findOne({
+  //   participant: [senderId, receiverId]
+  // })
 
+  let conversation = await Conversation.findOne({
+    participant: { $all: [senderId, receiverId] },
+  });
 
 
   if (!conversation) { //  Check if a conversation exists, if not create one
@@ -35,7 +38,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
   })
 
   if (newMessage) {    //  If the message was created successfully, add it to the conversation
-    conversation.message.push(newMessage._id)
+    conversation.messages.push(newMessage._id)
     await conversation.save()
   }
 
@@ -54,7 +57,7 @@ export const getMessages = asyncHandler(async (req, res, next) => { //  This fun
 
   const conversation = await Conversation.findOne({ //  Find the conversation between the two users
     participant: { $all: [myId, receiverId] },
-  }).populate("message")
+  }).populate("messages")
 
 
 
